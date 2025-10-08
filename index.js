@@ -137,6 +137,11 @@ app.get('/productos', (req, res) => {
     res.send(Productos);
 });
 
+app.get('/api/productos/disponibles', (req, res) => {
+    const productos = Productos.filter(p => p.disponible);
+    res.send(productos);
+});
+
 app.get('/api/productos/:id', (req, res) => {
     const producto = Productos.find(p => p.id === parseInt(req.params.id));
     if (!producto) return res.status(404).send('Producto no encontrado');
@@ -150,7 +155,7 @@ app.post('/api/productos', (req, res) => {
         precio: req.body.precio,
         descuento: req.body.descuento,
         disponible: (req.body.disponible === 'true'),
-        categoria: req.body.categoria,  
+        categoria: req.body.categoria,
         descripcion: req.body.descripcion,
         imagen_url: req.body.imagen_url
     };
@@ -167,12 +172,6 @@ app.delete('/api/productos/:id', (req, res) => {
     Productos.splice(index, 1);
     res.send(producto);
 });
-
-app.get('/api/productos/disponibles', (req, res) => {
-    const productos = Productos.filter(p => p.disponible);
-    if (!producto) return res.status(404).send('Producto no encontrado');
-    else res.send(producto);
-})
 
 
 const port = process.env.PORT || 3000;
