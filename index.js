@@ -138,7 +138,17 @@ app.get('/productos', (req, res) => {
 });
 
 app.get('/api/productos/disponibles', (req, res) => {
-    const productos = Productos.filter(p => p.disponible);
+    const { disponible } = req.query;
+
+    // Si no se especifica el query, devolver todos los productos disponibles por defecto
+    if (disponible === undefined) {
+        const productos = Productos.filter(p => p.disponible);
+        return res.send(productos);
+    }
+
+    // Convertir el query string a boolean
+    const esDisponible = disponible === 'true';
+    const productos = Productos.filter(p => p.disponible === esDisponible);
     res.send(productos);
 });
 

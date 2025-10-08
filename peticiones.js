@@ -152,13 +152,13 @@ async function obtenerProductosLibreria() {
   console.log('URL:', `${API_BASE_URL}/productos`);
   console.log('(Filtrando por categoría "libreria" en el cliente)');
   console.log('-'.repeat(60));
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/productos`);
     const data = await response.json();
-    
+
     const productosLibreria = data.filter(p => p.categoria === 'libreria');
-    
+
     console.log('✅ Respuesta exitosa');
     console.log(`Total de productos de librería: ${productosLibreria.length}`);
     console.log('Productos encontrados:');
@@ -170,33 +170,63 @@ async function obtenerProductosLibreria() {
   }
 }
 
+// Petición 7: Obtener productos disponibles (usando query parameter)
+async function obtenerProductosDisponibles(disponible) {
+  const queryParam = disponible !== undefined ? `?disponible=${disponible}` : '';
+  console.log(`\n✨ PETICIÓN 7: Obtener productos ${disponible === 'false' ? 'NO disponibles' : 'disponibles'}`);
+  console.log('URL:', `${API_BASE_URL}/api/productos/disponibles${queryParam}`);
+  console.log('-'.repeat(60));
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/productos/disponibles${queryParam}`);
+    const data = await response.json();
+
+    console.log('✅ Respuesta exitosa');
+    console.log(`Total de productos: ${data.length}`);
+    console.log('Productos encontrados:');
+    data.forEach(producto => {
+      console.log(`  - ${producto.nombre} (${producto.categoria}) - $${producto.precio}${producto.descuento > 0 ? ` (${producto.descuento}% desc.)` : ''}`);
+    });
+    console.log('\nRespuesta completa:', JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error('❌ Error:', error.message);
+  }
+}
+
 // Ejecutar todas las peticiones en secuencia
 async function ejecutarTodasLasPeticiones() {
   await obtenerTodosLosProductos();
   await delay(1000);
-  
+
   await obtenerProductoPorId(1);
   await delay(1000);
-  
+
   await obtenerProductoPorId(7);
   await delay(1000);
-  
+
   await crearProducto();
   await delay(1000);
-  
+
   await obtenerProductosCafeteria();
   await delay(1000);
-  
+
   await obtenerProductosLibreria();
   await delay(1000);
-  
+
+  // Probar la nueva ruta de disponibles
+  await obtenerProductosDisponibles('true');
+  await delay(1000);
+
+  await obtenerProductosDisponibles('false');
+  await delay(1000);
+
   await eliminarProducto(13); // El producto que acabamos de crear
   await delay(1000);
-  
+
   // Verificar que se eliminó
   console.log('\n🔄 VERIFICACIÓN: Listando productos después de eliminar');
   await obtenerTodosLosProductos();
-  
+
   console.log('\n' + '='.repeat(60));
   console.log('✅ Todas las peticiones completadas');
   console.log('='.repeat(60));
