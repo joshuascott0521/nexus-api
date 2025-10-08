@@ -155,6 +155,7 @@ app.post('/api/productos', (req, res) => {
         imagen_url: req.body.imagen_url
     };
     Productos.push(producto);
+    console.log(`AGREGADO!`)
     res.send(producto);
 });
 
@@ -166,6 +167,13 @@ app.delete('/api/productos/:id', (req, res) => {
     Productos.splice(index, 1);
     res.send(producto);
 });
+
+app.get('/api/productos/disponibles', (req, res) => {
+    const productos = Productos.filter(p => p.disponible);
+    if (!producto) return res.status(404).send('Producto no encontrado');
+    else res.send(producto);
+})
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Escuchando en el puerto ${port}...`));
