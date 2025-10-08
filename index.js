@@ -161,8 +161,13 @@ app.post('/api/productos', (req, res) => {
 app.delete('/api/productos/:id', (req, res) => {
     const producto = Productos.find(p => p.id === parseInt(req.params.id));
     if (!producto) return res.status(404).send('Producto no encontrado');
+
+    const index = Productos.indexOf(producto);
+    Productos.splice(index, 1);
+    res.send(producto);
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Escuchando en el puerto ${port}...`));
     
 
-
-module.exports = productos;
-];
