@@ -179,7 +179,6 @@ app.post('/api/productos', (req, res) => {
         imagen_url: req.body.imagen_url
     };
     Productos.push(producto);
-    console.log(`AGREGADO!`)
     res.send(producto);
 });
 
