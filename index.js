@@ -134,7 +134,16 @@ app.get('/', (req, res) => {
 });
 
 app.get('/productos', (req, res) => {
-    res.send(Productos);
+    const { categoria } = req.query;
+
+    // Si no se especifica categoría, devolver todos los productos
+    if (!categoria) {
+        return res.send(Productos);
+    }
+
+    // Filtrar por categoría
+    const productos = Productos.filter(p => p.categoria === categoria);
+    res.send(productos);
 });
 
 app.get('/api/productos/disponibles', (req, res) => {

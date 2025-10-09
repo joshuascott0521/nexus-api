@@ -122,23 +122,21 @@ async function eliminarProducto(id) {
   }
 }
 
-// Petición 5: Obtener productos de cafetería (filtrado manual)
+// Petición 5: Obtener productos de cafetería (usando query parameter)
 async function obtenerProductosCafeteria() {
   console.log('\n☕ PETICIÓN 5: Obtener productos de cafetería');
-  console.log('URL:', `${API_BASE_URL}/productos`);
-  console.log('(Filtrando por categoría "cafeteria" en el cliente)');
+  console.log('URL:', `${API_BASE_URL}/productos?categoria=cafeteria`);
+  console.log('(Filtrando por categoría en el servidor)');
   console.log('-'.repeat(60));
-  
+
   try {
-    const response = await fetch(`${API_BASE_URL}/productos`);
+    const response = await fetch(`${API_BASE_URL}/productos?categoria=cafeteria`);
     const data = await response.json();
-    
-    const productosCafeteria = data.filter(p => p.categoria === 'cafeteria');
-    
+
     console.log('✅ Respuesta exitosa');
-    console.log(`Total de productos de cafetería: ${productosCafeteria.length}`);
+    console.log(`Total de productos de cafetería: ${data.length}`);
     console.log('Productos encontrados:');
-    productosCafeteria.forEach(producto => {
+    data.forEach(producto => {
       console.log(`  - ${producto.nombre} - $${producto.precio}${producto.descuento > 0 ? ` (${producto.descuento}% desc.)` : ''}`);
     });
   } catch (error) {
@@ -146,23 +144,21 @@ async function obtenerProductosCafeteria() {
   }
 }
 
-// Petición 6: Obtener productos de librería (filtrado manual)
+// Petición 6: Obtener productos de librería (usando query parameter)
 async function obtenerProductosLibreria() {
   console.log('\n📚 PETICIÓN 6: Obtener productos de librería');
-  console.log('URL:', `${API_BASE_URL}/productos`);
-  console.log('(Filtrando por categoría "libreria" en el cliente)');
+  console.log('URL:', `${API_BASE_URL}/productos?categoria=libreria`);
+  console.log('(Filtrando por categoría en el servidor)');
   console.log('-'.repeat(60));
 
   try {
-    const response = await fetch(`${API_BASE_URL}/productos`);
+    const response = await fetch(`${API_BASE_URL}/productos?categoria=libreria`);
     const data = await response.json();
 
-    const productosLibreria = data.filter(p => p.categoria === 'libreria');
-
     console.log('✅ Respuesta exitosa');
-    console.log(`Total de productos de librería: ${productosLibreria.length}`);
+    console.log(`Total de productos de librería: ${data.length}`);
     console.log('Productos encontrados:');
-    productosLibreria.forEach(producto => {
+    data.forEach(producto => {
       console.log(`  - ${producto.nombre} - $${producto.precio} ${!producto.disponible ? '(No disponible)' : ''}`);
     });
   } catch (error) {
