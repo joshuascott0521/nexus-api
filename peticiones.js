@@ -189,6 +189,46 @@ async function obtenerProductosDisponibles(disponible) {
   }
 }
 
+// Petición 8: Obtener productos no disponibles (usando query parameter)
+async function obtenerProductosNoDisponibles() {
+  console.log('\n🚫 PETICIÓN 8: Obtener productos NO disponibles');
+  console.log('URL:', `${API_BASE_URL}/api/productos/disponibles?disponible=false`);
+  console.log('-'.repeat(60));
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/productos/disponibles?disponible=false`);
+    
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status}`);
+    }
+    
+    const data = await response.json();
+
+    console.log('✅ Respuesta exitosa');
+    console.log(`📊 Total de productos NO disponibles: ${data.length}`);
+    
+    if (data.length === 0) {
+      console.log('ℹ️  No hay productos no disponibles en este momento');
+    } else {
+      console.log('📋 Productos NO disponibles encontrados:');
+      data.forEach((producto, index) => {
+        console.log(`  ${index + 1}. ${producto.nombre} (${producto.categoria})`);
+        console.log(`     Precio: $${producto.precio}`);
+        console.log(`     Descuento: ${producto.descuento}%`);
+        console.log(`     Disponible: ${producto.disponible ? 'Sí' : 'No'}`);
+        if (producto.descripcion) {
+          console.log(`     Descripción: ${producto.descripcion}`);
+        }
+        console.log('     ---');
+      });
+    }
+    
+    console.log('\n📄 Respuesta completa:', JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error('❌ Error:', error.message);
+  }
+}
+
 // Ejecutar todas las peticiones en secuencia
 async function ejecutarTodasLasPeticiones() {
   await obtenerTodosLosProductos();
